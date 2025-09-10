@@ -1,0 +1,56 @@
+<div class="container mx-auto">
+  <form
+    [formGroup]="postFg"
+    class="flex flex-col items-justify-center py-4"
+    (ngSubmit)="onSubmit()"
+  >
+    <mat-form-field class="">
+      <mat-label>Title</mat-label>
+      <input formControlName="title" matInput placeholder="Enter title..." />
+      @if(postFgControls.title.hasError('required') &&
+      postFgControls.title.touched) {
+      <mat-error> Title is required </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Post</mat-label>
+      <textarea
+        formControlName="post"
+        matInput
+        rows="8"
+        placeholder="Enter you post content..."
+      ></textarea>
+      @if(postFgControls.post.hasError('required') &&
+      postFgControls.post.touched) {
+      <mat-error> Post is required </mat-error>
+      }
+    </mat-form-field>
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-gray-900 dark:disabled:hover:bg-gray-800 dark:disabled:hover:text-gray-400"
+        [disabled]="postFg.invalid"
+      >
+        Create
+      </button>
+    </div>
+
+    <!-- expasion panel list -->
+    <div class="">
+      <span class="font-semibold text-gray-900 text-lg py-3">Posts</span>
+      <mat-accordion>
+        @for (item of postsList(); track item) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> {{ item.title }} </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>{{ item.post }}</p>
+        </mat-expansion-panel>
+        } @empty {
+        <div class="text-sm italic text-gray-500 py-4">No Posts</div>
+        }
+      </mat-accordion>
+    </div>
+  </form>
+</div>
