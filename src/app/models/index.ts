@@ -1,4 +1,5 @@
 export interface CreatePostsCommand {
+  id:string;
   title: string;
-  post: string;
+  content: string;
 }

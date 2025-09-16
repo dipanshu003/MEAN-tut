@@ -16,13 +16,13 @@
     <mat-form-field>
       <mat-label>Post</mat-label>
       <textarea
-        formControlName="post"
+        formControlName="content"
         matInput
         rows="8"
         placeholder="Enter you post content..."
       ></textarea>
-      @if(postFgControls.post.hasError('required') &&
-      postFgControls.post.touched) {
+      @if(postFgControls.content.hasError('required') &&
+      postFgControls.content.touched) {
       <mat-error> Post is required </mat-error>
       }
     </mat-form-field>
@@ -45,7 +45,7 @@
           <mat-expansion-panel-header>
             <mat-panel-title> {{ item.title }} </mat-panel-title>
           </mat-expansion-panel-header>
-          <p>{{ item.post }}</p>
+          <p>{{ item.content }}</p>
           <mat-action-row>
             <button
               type="button"
