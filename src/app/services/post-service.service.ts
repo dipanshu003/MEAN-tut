@@ -17,7 +17,16 @@ export class PostService {
     );
   }
 
+  fetchPostById(id: string) {
+    return this.http.get<{ message: string; data: CreatePostsCommand }>(
+      `${this.baseUrl}/api/getPostById/${id}`
+    );
+  }
+
   savePost(data: CreatePostsCommand) {
-   return this.http.post<{ message: string }>(this.baseUrl + '/api/savePost', data);
+    return this.http.post<{ message: string }>(
+      this.baseUrl + '/api/savePost',
+      data
+    );
   }
 }

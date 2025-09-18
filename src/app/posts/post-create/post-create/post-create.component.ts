@@ -35,6 +35,7 @@ export class PostCreateComponent implements OnInit {
   postsList = signal<CreatePostsCommand[]>([]);
 
   postFg = this._fb.nonNullable.group({
+    id: this._fb.nonNullable.control<string>(''),
     title: this._fb.nonNullable.control<string>('', [Validators.required]),
     content: this._fb.nonNullable.control<string>('', [Validators.required]),
   });
@@ -54,11 +55,31 @@ export class PostCreateComponent implements OnInit {
         content: this.postFg.value.content!,
         id: '',
       };
-
       this.savePost(newPost);
-
-      this.postsList.update((posts) => [...posts, newPost]);
     }
+  }
+
+  fetchPostById(id: string) {
+    this._postService
+      .fetchPostById(id)
+      .pipe(
+        filter((res) => !!res),
+        take(1)
+      )
+      .subscribe({
+        next: (res) => {
+          console.log('Fetched Post By Id ', res);
+          this.postFg.patchValue({
+            id: res.data.id,
+            title: res.data.title,
+            content: res.data.content,
+          });
+        },
+        error: (err) => {
+          console.log(err);
+        },
+        complete: () => {},
+      });
   }
 
   fetchAllPosts() {
@@ -70,6 +91,8 @@ export class PostCreateComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
+          console.log('Fetched All Post ', res);
+
           this.postsList.set(res.data);
         },
         error: () => {},
@@ -86,7 +109,21 @@ export class PostCreateComponent implements OnInit {
         tap(() => this.postFg.reset())
       )
       .subscribe({
-        next: (res) => console.log(res),
+        next: (res) => {
+          // console.log('Saved Post from backend: ', res);
+          this.fetchAllPosts();
+        },
+        error: (err) => {
+          console.log(err);
+        },
       });
+  }
+
+  onDeletePost(item: CreatePostsCommand) {}
+
+  onEditPost(item: CreatePostsCommand) {
+    if (item.id) {
+      this.fetchPostById(item.id);
+    }
   }
 }
